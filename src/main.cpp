@@ -25,7 +25,7 @@ namespace
     GLfloat floorColor[] = {1.0f, 0.0f, 0.0f, 1.0f};
     
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, particleColor);
-    
+    glScaled(30.0f,30.0f,30.0f);
     glutSolidSphere(0.1f,10.0f,10.0f);
     
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, floorColor);
