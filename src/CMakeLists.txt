@@ -3,11 +3,16 @@ set(BIN_NAME globe)
 set(CPP_FILES
     camera.cpp
     main.cpp
+    image.cpp
+    stb.cpp
     )
 
 set(CPP_HEADERS
     camera.h
     extra.h
+    image.h
+    stb_image.h
+    stb_image_write.h
     )
 
 set(LIBS_USED

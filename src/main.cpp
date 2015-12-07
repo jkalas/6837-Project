@@ -7,6 +7,7 @@
 
 #include "extra.h"
 #include "camera.h"
+#include "image.h"
 
 ///TODO: include more headers if necessary
 
@@ -15,25 +16,19 @@ using namespace std;
 // Globals here.
 namespace
 {
-
-  // Draw the current particle positions
-  void drawSystem()
+  GLuint initTexture(Image * image)
   {
-    
-    // Base material colors (they don't change)
-    GLfloat particleColor[] = {0.4f, 0.7f, 1.0f, 1.0f};
-    GLfloat floorColor[] = {1.0f, 0.0f, 0.0f, 1.0f};
-    
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, particleColor);
-    glutSolidSphere(3.0f,100.0f,100.0f);
-    
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, floorColor);
-    
+    GLuint texId;
+    glGenTextures(1, &texId);
+    glBindTexture(GL_TEXTURE_2D, texId);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->getWidth(), image->getHeight(), 0,
+        GL_RGB, GL_UNSIGNED_BYTE, image->getPixels());
+    return texId;
   }
-        
 
     //-------------------------------------------------------------------
-    
+    GLuint texId;
+    GLUquadric *quadric;
         
     // This is the camera
     Camera camera;
@@ -142,6 +137,10 @@ namespace
     // Initialize OpenGL's rendering modes
     void initRendering()
     {
+        quadric = gluNewQuadric();
+        Image* image = Image::loadPNG("../earthmap1k.png");
+        texId = initTexture(image);
+
         glEnable(GL_DEPTH_TEST);   // Depth testing must be turned on
         glEnable(GL_LIGHTING);     // Enable lighting calculations
         glEnable(GL_LIGHT0);       // Turn on light #0.
@@ -152,8 +151,8 @@ namespace
         glShadeModel(GL_SMOOTH);
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+	    glEnable(GL_CULL_FACE);
+	    glCullFace(GL_BACK);
 
         // Clear to black
         glClearColor(0,0,0,1);
@@ -177,8 +176,18 @@ namespace
         glLoadMatrixf( camera.viewMatrix() );
 
         // THIS IS WHERE THE DRAW CODE GOES.
+        glEnable(GL_TEXTURE_2D);
 
-        drawSystem();
+        glBindTexture(GL_TEXTURE_2D, texId);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        gluQuadricTexture(quadric,1);
+        //glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, particleColor);
+        gluSphere(quadric,3.0f,100.0f,100.0f);
+    
+    
+
 
         // This draws the coordinate axes when you're rotating, to
         // keep yourself oriented.
@@ -224,10 +233,6 @@ namespace
 
         glutTimerFunc(t, &timerFunc, t);
     }
-
-    
-
-    
     
 }
 
