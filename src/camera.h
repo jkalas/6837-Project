@@ -19,6 +19,7 @@ public:
     Camera();
     
     typedef enum { NONE, LEFT, MIDDLE, RIGHT } Button;
+    typedef enum { UP, DOWN, L, R } Arrow;
 
     // You must call all of the Set*() functions before you use this!
     // I didn't put it into the constructor because it's inconvenient
@@ -28,10 +29,14 @@ public:
     void SetViewport(int x, int y, int w, int h);
     void SetPerspective(float fovy);
 
+    void ResetStart();
+
     // Call from whatever UI toolkit
     void MouseClick(Button button, int x, int y);
     void MouseDrag(int x, int y);
     void MouseRelease(int x, int y);
+
+    void ArrowClick(Arrow arrow);
 
     // Apply viewport, perspective, and modeling
     // use these instead of 

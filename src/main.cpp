@@ -26,7 +26,7 @@ namespace
     
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, particleColor);
     glutSolidSphere(3.0f,100.0f,100.0f);
-    
+
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, floorColor);
     
   }
@@ -65,6 +65,7 @@ namespace
             Matrix4f eye = Matrix4f::identity();
             camera.SetRotation( eye );
             camera.SetCenter( Vector3f::ZERO );
+            camera.ResetStart();
             break;
         }
 
@@ -79,11 +80,26 @@ namespace
     // received.  Right now, it's handling the arrow keys.
     void specialFunc( int key, int x, int y )
     {
-        switch ( key )
-        {
+        g_mousePressed = true;
 
+        switch(key) {
+            case GLUT_KEY_UP:
+                camera.ArrowClick(Camera::UP);
+                break;  
+            case GLUT_KEY_DOWN:
+                camera.ArrowClick(Camera::DOWN);
+                break;
+            case GLUT_KEY_LEFT:
+                camera.ArrowClick(Camera::L);
+                break;
+            case GLUT_KEY_RIGHT:
+                camera.ArrowClick(Camera::R);
+                break;
+            default:
+                break;
         }
-        //glutPostRedisplay();
+
+        glutPostRedisplay();
     }
 
     //  Called when mouse button is pressed.

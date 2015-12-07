@@ -9,12 +9,19 @@ Camera::Camera()
 {
     mStartRot = Matrix4f::identity();
     mCurrentRot = Matrix4f::identity();
+    ResetStart();
 }
 
 void Camera::SetDimensions(int w, int h)
 {
     mDimensions[0] = w;
     mDimensions[1] = h;
+}
+
+void Camera::ResetStart()
+{
+    mStartClick[0] = 300;
+    mStartClick[1] = 300;
 }
 
 void Camera::SetPerspective(float fovy)
@@ -44,6 +51,32 @@ void Camera::SetRotation(const Matrix4f& rotation)
 void Camera::SetDistance(const float distance)
 {
     mStartDistance = mCurrentDistance = distance;
+}
+
+void Camera::ArrowClick(Arrow arrow) {
+    int x = mStartClick[0];
+    int y = mStartClick[1];
+
+    switch (arrow) {
+        case L:
+            ArcBallRotation(x - 5, y);
+            break;
+        case R:
+            ArcBallRotation(x + 5, y);
+            break;
+        case UP:
+            ArcBallRotation(x, y - 5);
+            break;
+        case DOWN:
+            ArcBallRotation(x, y + 5);
+            break;
+    }
+
+    mStartRot = mCurrentRot;
+    mStartCenter = mCurrentCenter;
+    mStartDistance = mCurrentDistance;
+    
+    mButtonState = NONE;
 }
 
 void Camera::MouseClick(Button button, int x, int y)
@@ -109,7 +142,7 @@ void Camera::ArcBallRotation(int x, int y)
     sy = mStartClick[1] - ( mDimensions[1] / 2.f );
     ex = x - ( mDimensions[0] / 2.f );
     ey = y - ( mDimensions[1] / 2.f );
-    
+
     // invert y coordinates (raster versus device coordinates)
     sy = -sy;
     ey = -ey;
