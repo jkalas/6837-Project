@@ -8,6 +8,7 @@
 #include "extra.h"
 #include "camera.h"
 #include "image.h"
+#include "Mesh.h"
 
 ///TODO: include more headers if necessary
 
@@ -32,6 +33,8 @@ namespace
         
     // This is the camera
     Camera camera;
+
+    Mesh mesh;
 
     // These are state variables for the UI
     bool g_mousePressed = false;
@@ -157,6 +160,9 @@ namespace
         Image* image = Image::loadPNG("../earthmap1k.png");
         texId = initTexture(image);
 
+        mesh.load("../globe.obj");
+        mesh.draw();
+
         glEnable(GL_DEPTH_TEST);   // Depth testing must be turned on
         glEnable(GL_LIGHTING);     // Enable lighting calculations
         glEnable(GL_LIGHT0);       // Turn on light #0.
@@ -270,7 +276,7 @@ int main( int argc, char* argv[] )
     camera.SetDistance( 10 );
     camera.SetCenter( Vector3f::ZERO );
     
-    glutCreateWindow("Assignment 3");
+    glutCreateWindow("Globe");
 
     // Initialize OpenGL parameters.
     initRendering();

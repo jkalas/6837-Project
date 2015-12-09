@@ -4,6 +4,7 @@ set(CPP_FILES
     camera.cpp
     main.cpp
     image.cpp
+    mesh.cpp
     stb.cpp
     )
 
@@ -11,6 +12,7 @@ set(CPP_HEADERS
     camera.h
     extra.h
     image.h
+    mesh.h
     stb_image.h
     stb_image_write.h
     )
